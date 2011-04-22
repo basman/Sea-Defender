@@ -63,9 +63,11 @@ Missile *PBoat::fire_missile(vec2 dest,float radius)
   --m_missiles;
   vec2 src = m_pos + vec2(0.0,m_shift + 0.02);
   return new Missile(src,dest,radius);
+  // TODO1 botI: signal missile fired (parameter: m_missiles/missiles left)
 }
 
 void PBoat::reload_ammo(void)
 {
   m_missiles = pboat_missiles;
+  // TODO1 botI: signal missile reload (parameter: m_missiles/missiles left)
 }

@@ -33,6 +33,9 @@ void Missile::update(float t)
     float len = length(m_pos - m_start_pos);
     if (len>=m_len) {
       explode();
+  // TODO1 botI: signal missile explosion
+    } else {
+  // TODO1 botI: signal missile update
     }
   }
 

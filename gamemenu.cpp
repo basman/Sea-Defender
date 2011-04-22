@@ -199,11 +199,13 @@ void GameMenu::process_action(str_pair_t action)
     g_current_game = new Game(difficulty,wave);
 		g_mode = MODE_GAME;
     g_timer->unpause();
+  // TODO1 botI: signal (un)pause
 	}
 
   if (name=="resumegame") {
     g_mode = MODE_GAME;
     g_timer->unpause();
+  // TODO1 botI: signal (un)pause
   }
 }
 
@@ -232,6 +234,7 @@ void GameMenu::key_action(int key)
     if (g_current_game) {
   		g_mode = MODE_GAME;
       g_timer->unpause();
+  // TODO1 botI: signal (un)pause
     } else {
       g_exit = true;
     }

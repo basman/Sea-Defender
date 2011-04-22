@@ -137,6 +137,7 @@ void App::keyboard_cb(int key,int action)
 	if (!g_current_game || g_current_game->current_gamemode() != GM_GAMEOVER_HISCORE) {
 		if (key == 'P') {
 			g_timer->pause_toggle();
+  // TODO1 botI: signal (un)pause
 			return;
 		}
 	
@@ -257,8 +258,10 @@ void App::run_inner_loop(void)
 	}
 
 
-	if (glfwGetWindowParam(GLFW_ICONIFIED)==GL_TRUE && glfwGetWindowParam(GLFW_ACTIVE)==GL_FALSE)
+	if (glfwGetWindowParam(GLFW_ICONIFIED)==GL_TRUE && glfwGetWindowParam(GLFW_ACTIVE)==GL_FALSE) {
+  // TODO1 botI: signal (un)pause
 		g_timer->pause();
+	}
 
 	glDisable(GL_DEPTH_TEST);
 	glDepthMask(GL_FALSE);

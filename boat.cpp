@@ -63,6 +63,7 @@ void Boat::hit(float x)
 
     m_hit_pos = hit_pos;
 
+  // TODO1 botI: signal ship damaged
 	} else if (!m_sinking) {
 		m_sinking = true;
 		m_sinking_start_time = g_timer->now();
@@ -73,6 +74,7 @@ void Boat::hit(float x)
 			m_bbl[i] = new PE_Bubbles(vec2(0.0,0.0));
 			m_bbl_emitpos_x[i] = ((float)i/m_num_bubble_streams)+0.1-0.5 + (RAND_0_1 - 0.5)*0.175;
 		}
+  // TODO1 botI: signal ship sinking
 	}
 
   vec2 expl_pos = vec2(m_pos[0]+hit_pos,m_pos[1]+m_pos_shift-0.00);

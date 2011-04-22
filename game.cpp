@@ -46,6 +46,8 @@ void Game::change_gamemode(game_modes_t gamemode)
   m_last_gamemode_change = g_timer->now();
 }
 
+  // TODO2 botI: accept start game signal from bot
+
 void Game::start_wave(void)
 {
   m_torpedoes_to_spawn = clamp<int>(5 + (m_wave-1), 0,20);
@@ -57,6 +59,8 @@ void Game::start_wave(void)
 
   m_torpedoes.clear();
   m_missiles.clear();
+
+  // TODO1 botI: send wave/level starts (parameter: missile radius)
 }
 
 void Game::spawn_torpedo(void)
@@ -79,6 +83,7 @@ void Game::spawn_torpedo(void)
 
   m_torpedoes_to_spawn--;
   m_last_torpedo_spawned_at = g_timer->now();
+  // TODO1 botI: signal torpedo spawned
 }
 
 void Game::add_effect(FX *effect,int draw_order_id)
@@ -214,6 +219,7 @@ void Game::draw_over(void)
       Missile &m = *m_missiles[y];
       if (m.exploding() && t.m_obb.overlaps(m.m_explosion_circle)) {
         t.explode();
+  // TODO1 botI: signal missile hit
         m_score += torpedo_hit_score();
 
         string tscore = "+" + to_string<int>(torpedo_hit_score());
@@ -275,11 +281,13 @@ void Game::gamemode_specific_stuff(void)
 
     if (ships_left()<1) {
       change_gamemode(GM_GAMEOVER);
+  // TODO2 botI: signal game over
       break;
     }
     
     if (torpedoes_left()<1) {
       change_gamemode(GM_ENDWAVE);
+  // TODO2 botI: signal end of wave
       break;
     }
 
@@ -368,6 +376,7 @@ void Game::gamemode_specific_stuff(void)
     
     g_resources.font->print_text_with_shadow(nametext.c_str(),vec2(0.55, y + adv_y*3), 1.0, false, vec4(1,1,0,1));
 
+  // TODO2 botI: signal highscore input to bot
     break;
     }
   }
@@ -383,6 +392,8 @@ bool Game::mouse_over_menu_button(const vec2 &pos)
   return false;
 }
 
+// TODO1 botI: accept missile aiming event from bot
+
 void Game::mouse_cb(int button,int action)
 {
   vec2 dest = g_mouse.get_pos();
@@ -391,6 +402,7 @@ void Game::mouse_cb(int button,int action)
     g_mode = MODE_MENU;
     g_app->m_gamemenu->switch_to_item(0);
     g_timer->pause();
+  // TODO1 botI: signal (un)pause
     return;
   }
 
@@ -444,6 +456,7 @@ void Game::highscore_entry_key(int key)
     
     case GLFW_KEY_ENTER:
       g_app->m_hiscore->add_highscore(m_hiscore_name,m_score);
+  // TODO2 botI: accept highscore name from bot
 
       change_gamemode(GM_GAMEOVER);
       m_score = 0;
@@ -488,6 +501,7 @@ void Game::keyboard_cb(int key,int action)
       m_ended = true;
     } else {
       g_timer->pause();
+  // TODO1 botI: signal (un)pause
     }
     g_mode = MODE_MENU;
     g_app->m_gamemenu->switch_to_item(0);

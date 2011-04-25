@@ -10,7 +10,8 @@ BotInterface::BotInterface() :
 
 BotInterface::~BotInterface()
 {
-    //dtor
+    if(m_connected)
+        m_client_socket.close();
 }
 /** @brief async_accept
   *
@@ -18,7 +19,7 @@ BotInterface::~BotInterface()
   */
 bool BotInterface::async_accept()
 {
-    if(m_listen_socket.accept(m_client_socket)) {
+    if(!m_connected && m_listen_socket.accept(m_client_socket)) {
         m_client_socket.set_non_blocking(true);
         m_connected = true;
         return true;

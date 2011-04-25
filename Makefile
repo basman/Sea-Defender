@@ -16,7 +16,7 @@ OBJECTS = main.o snoutlib/glfwapp.o snoutlib/settings.o snoutlib/loadingscreen.o
 	  snoutlib/particles.o snoutlib/perlin.o snoutlib/bbox.o snoutlib/fx.o\
 	  gamemenu.o layout.o background.o boat.o pboat.o pe_smoke.o resources.o credits.o hiscore.o \
 	  torpedo.o pe_bubbles.o pe_bubble_expl.o game.o missile.o fx_missile_expl.o pe_smoketrail.o \
-	  fx_ship_expl.o fx_torpedo_expl.o pe_torpedo_expl.o fx_moving_text.o
+	  fx_ship_expl.o fx_torpedo_expl.o pe_torpedo_expl.o fx_moving_text.o botinterface.o
 
 SRCS = $(OBJECTS:.o=.cpp)
 

@@ -1,4 +1,4 @@
-
+#include <sstream>
 #include "game.h"
 #include "resources.h"
 #include "background.h"
@@ -65,11 +65,10 @@ void Game::start_wave(void)
   // TODO1 botI: send wave/level starts (parameter: missile radius)
   // FIXME check null ptr
   m_bot_interface->async_accept();
-  // FIXME provide missile radius
-  string n1 = "pboat1";
-  string n2 = "start_wave";
+  stringstream bot_param;
+  bot_param << "wave=" << m_wave << ",difficulty=" << m_difficulty << ",missile_radius=" << m_missile_radius;
   m_bot_interface->async_send(g_timer->now() - m_last_gamemode_change,
-                             m_pboat1->get_pos(), n1, n2);
+                             m_pboat1->get_pos(), string("start_wave"), bot_param.str());
 }
 
 void Game::spawn_torpedo(void)

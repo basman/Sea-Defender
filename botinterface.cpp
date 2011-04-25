@@ -52,7 +52,7 @@ bool BotInterface::async_read(string &msg)
   * send a line to the bot.
   * disconnect bot on any error.
   */
-bool BotInterface::async_send(int time, vec2 pos, string &object, string &event)
+bool BotInterface::async_send(float time, vec2 pos, string &object, string &event)
 {
     if(!m_connected)
         return false;

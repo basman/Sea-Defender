@@ -7,6 +7,7 @@
 #include "pboat.h"
 #include "torpedo.h"
 #include "missile.h"
+#include "botinterface.h"
 
 enum app_modes_t {MODE_MENU,MODE_GAME,MODE_CREDITS,MODE_SCORES};
 extern app_modes_t g_mode;
@@ -20,10 +21,10 @@ class Game
   int m_wave;
 
 	Boat *m_boats[3];
-	
+
 	PBoat *m_pboat1;
 	PBoat *m_pboat2;
-	
+
 	vector<Torpedo> m_torpedoes;
 	vector<Missile*> m_missiles;
 
@@ -55,8 +56,9 @@ class Game
 
   string m_hiscore_name;
   bool m_ended;
+  BotInterface *m_bot_interface;
 public:
-  Game(int difficulty, int wave=1);
+  Game(int difficulty, int wave=1, BotInterface *boti=NULL);
   ~Game();
 
   void draw_under(void);

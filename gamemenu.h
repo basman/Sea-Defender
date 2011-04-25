@@ -6,6 +6,7 @@
 #include "snoutlib/menu.h"
 #include "snoutlib/mfont.h"
 #include "snoutlib/settings.h"
+#include "botinterface.h"
 
 typedef vector<Menu *> vec_menup;
 
@@ -13,6 +14,7 @@ class GameMenu
 {
   MenuSystem m_menusystem;
   vec_menup m_menus;
+  BotInterface m_bot_interface;
 
   void create_menus(void);
   void process_action(str_pair_t action);

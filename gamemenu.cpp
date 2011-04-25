@@ -41,7 +41,7 @@ void GameMenu::create_menus(void)
   for(int i=0,x=0;i<nummodes;++i) {
     if ((vidmodes[i].RedBits + vidmodes[i].GreenBits + vidmodes[i].BlueBits) < 24) continue;
     if (vidmodes[i].Width < 1024) continue;
-   
+
     string s = to_string<int>(vidmodes[i].Width) + "x" + to_string<int>(vidmodes[i].Height);
     string s2 = to_string<int>(vidmodes[i].Width) + " " + to_string<int>(vidmodes[i].Height);
     resolutions.push_back(MenuitemOption(s,s2));
@@ -150,7 +150,7 @@ void GameMenu::process_action(str_pair_t action)
   if (name=="exit") {
     g_exit = true;
   }
-  
+
   if (name=="apply_video_settings") {
     // collect save settings
     Menu *m = m_menusystem.str_to_menup("videosettings");
@@ -166,7 +166,7 @@ void GameMenu::process_action(str_pair_t action)
     g_restart = true;
     g_exit = true;
   }
-  
+
   if (name=="layout_change") {
     g_layouts->set_layout(value);
   }
@@ -196,7 +196,7 @@ void GameMenu::process_action(str_pair_t action)
     m_menusystem.switch_to_menu("main_ingame");
 
     delete g_current_game;
-    g_current_game = new Game(difficulty,wave);
+    g_current_game = new Game(difficulty,wave,&m_bot_interface);
 		g_mode = MODE_GAME;
     g_timer->unpause();
   // TODO1 botI: signal (un)pause

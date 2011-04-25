@@ -14,7 +14,7 @@ app_modes_t g_mode = MODE_MENU;
 
 extern App *g_app;
 
-Game::Game(int difficulty,int wave) : m_score(0), m_difficulty(difficulty), m_wave(wave), m_hiscore_name(""), m_ended(false)
+Game::Game(int difficulty,int wave, BotInterface *boti) : m_score(0), m_difficulty(difficulty), m_wave(wave), m_hiscore_name(""), m_ended(false)
 {
   m_boats[0] = new Boat(vec2(0.37f,0.24f),0);
   m_boats[1] = new Boat(vec2(0.80f,0.24f),1);
@@ -24,6 +24,8 @@ Game::Game(int difficulty,int wave) : m_score(0), m_difficulty(difficulty), m_wa
   m_pboat2 = new PBoat(vec2(1.52f,0.25f));
 
   m_missile_radius = 0.07 - (0.02*m_difficulty);
+
+  m_bot_interface = boti;
 
   change_gamemode(GM_STARTWAVE);
 }
@@ -61,6 +63,13 @@ void Game::start_wave(void)
   m_missiles.clear();
 
   // TODO1 botI: send wave/level starts (parameter: missile radius)
+  // FIXME check null ptr
+  m_bot_interface->async_accept();
+  // FIXME provide missile radius
+  string n1 = "pboat1";
+  string n2 = "start_wave";
+  m_bot_interface->async_send(g_timer->now() - m_last_gamemode_change,
+                             m_pboat1->get_pos(), n1, n2);
 }
 
 void Game::spawn_torpedo(void)
@@ -68,14 +77,14 @@ void Game::spawn_torpedo(void)
   vec2 pos(RAND_0_1 * 1.6,1.1);
 //  vec2 target(RAND_0_1 * 1.25 + 0.17,0.25);
   vec2 target;
-  
+
   if (m_boats[0]->is_alive() && !m_boats[1]->is_alive() && !m_boats[2]->is_alive()) // left affinity
     target = vec2(rand_range(0.17,0.80),0.25);
   else if (!m_boats[0]->is_alive() && !m_boats[1]->is_alive() && m_boats[2]->is_alive()) // right affinity
     target = vec2(rand_range(0.80,1.43),0.25);
   else
     target = vec2(rand_range(0.17,1.43),0.25);
-  
+
   vec2 vector = target - pos;
   float velocity = 0.05 + ((float)m_wave/100.0)*0.2;
 
@@ -123,7 +132,7 @@ void Game::draw_HUD(void)
     string wave = "Wave: " + to_string<int>(m_wave);
 		g_resources.font->print_text_with_shadow(wave.c_str(),vec2(0.0, 0.0), 0.7, false, vec4(1,1,1,1));
   }
-  
+
   // score
 	{
     char score[7]={0};
@@ -182,7 +191,7 @@ void Game::draw_over(void)
   // missile dests
   for(unsigned int i=0;i<m_missiles.size();++i)
     m_missiles[i]->draw_dest();
-  
+
   // missiles
   for(unsigned int i=0;i<m_missiles.size();++i)
     m_missiles[i]->draw();
@@ -192,12 +201,12 @@ void Game::draw_over(void)
     Torpedo &t = *it;
 
     t.update();
-  
+
     if (t.alive() == false)
       continue;
 
 //    t.m_obb.draw();
-    
+
     // torpedo - sea collision
     vec2 t_pos = t.get_pos();
     if (t_pos[1] < 0.30) {
@@ -206,7 +215,7 @@ void Game::draw_over(void)
         t.explode();
     }
 
-    // torpedo - boat collisions    
+    // torpedo - boat collisions
     for(int i=0;i<3;++i) {
       if (!m_boats[i]->is_sinking() && t.m_obb.overlaps(m_boats[i]->m_obb)) {
         t.explode();
@@ -231,7 +240,7 @@ void Game::draw_over(void)
 
       }
     }
- 
+
     t.draw();
   } // FOR_EACH
 
@@ -284,7 +293,7 @@ void Game::gamemode_specific_stuff(void)
   // TODO2 botI: signal game over
       break;
     }
-    
+
     if (torpedoes_left()<1) {
       change_gamemode(GM_ENDWAVE);
   // TODO2 botI: signal end of wave
@@ -322,7 +331,7 @@ void Game::gamemode_specific_stuff(void)
         g_resources.mesh_tanker->draw();
         glPopMatrix();
       }
-    
+
       // missiles left
       {
         s = "x" + to_string<int>(missilesleft);
@@ -373,7 +382,7 @@ void Game::gamemode_specific_stuff(void)
     string nametext = "> " + m_hiscore_name;
     if (gm_time-(floor(gm_time))<0.5)
       nametext += "_";
-    
+
     g_resources.font->print_text_with_shadow(nametext.c_str(),vec2(0.55, y + adv_y*3), 1.0, false, vec4(1,1,0,1));
 
   // TODO2 botI: signal highscore input to bot
@@ -425,12 +434,12 @@ void Game::mouse_cb(int button,int action)
   case GM_INGAME:
     switch(button) {
     case GLFW_MOUSE_BUTTON_LEFT:
-  
+
       if (m_pboat1->missiles_left()) {
         m_missiles.push_back(m_pboat1->fire_missile(dest,m_missile_radius));
       }
       break;
-  
+
     case GLFW_MOUSE_BUTTON_RIGHT:
       if (m_pboat2->missiles_left()) {
         m_missiles.push_back(m_pboat2->fire_missile(dest,m_missile_radius));
@@ -453,7 +462,7 @@ void Game::highscore_entry_key(int key)
       if (m_hiscore_name.length()>0)
         m_hiscore_name.erase(m_hiscore_name.end()-1);
       break;
-    
+
     case GLFW_KEY_ENTER:
       g_app->m_hiscore->add_highscore(m_hiscore_name,m_score);
   // TODO2 botI: accept highscore name from bot
@@ -466,7 +475,7 @@ void Game::highscore_entry_key(int key)
 
       g_app->m_gamemenu->switch_to_menu("main");
       g_app->m_gamemenu->switch_to_item(0);
-    
+
 
       break;
   }

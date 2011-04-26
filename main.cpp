@@ -25,6 +25,7 @@ bool g_display_fps = false;
 Mouse g_mouse;
 
 App *g_app = NULL;
+BotInterface *g_bot_interface = NULL;
 
 void App::init_settings(void)
 {
@@ -358,6 +359,7 @@ int main(void)
 	srand((unsigned int)time(NULL));
 
 	g_timer = new Timer();
+	g_bot_interface = new BotInterface();
 
 	do {
 		g_app = new App;

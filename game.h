@@ -7,7 +7,6 @@
 #include "pboat.h"
 #include "torpedo.h"
 #include "missile.h"
-#include "botinterface.h"
 
 enum app_modes_t {MODE_MENU,MODE_GAME,MODE_CREDITS,MODE_SCORES};
 extern app_modes_t g_mode;
@@ -56,9 +55,9 @@ class Game
 
   string m_hiscore_name;
   bool m_ended;
-  BotInterface *m_bot_interface;
+
 public:
-  Game(int difficulty, int wave=1, BotInterface *boti=NULL);
+  Game(int difficulty, int wave=1);
   ~Game();
 
   void draw_under(void);

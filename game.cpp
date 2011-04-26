@@ -3,18 +3,20 @@
 #include "resources.h"
 #include "background.h"
 #include "main.h"
+#include "botinterface.h"
 
 #include "fx_ship_expl.h"
 #include "fx_moving_text.h"
 
 extern Mouse g_mouse;
+extern BotInterface *g_bot_interface;
 
 Game *g_current_game;
 app_modes_t g_mode = MODE_MENU;
 
 extern App *g_app;
 
-Game::Game(int difficulty,int wave, BotInterface *boti) : m_score(0), m_difficulty(difficulty), m_wave(wave), m_hiscore_name(""), m_ended(false)
+Game::Game(int difficulty,int wave) : m_score(0), m_difficulty(difficulty), m_wave(wave), m_hiscore_name(""), m_ended(false)
 {
   m_boats[0] = new Boat(vec2(0.37f,0.24f),0);
   m_boats[1] = new Boat(vec2(0.80f,0.24f),1);
@@ -24,8 +26,6 @@ Game::Game(int difficulty,int wave, BotInterface *boti) : m_score(0), m_difficul
   m_pboat2 = new PBoat(vec2(1.52f,0.25f));
 
   m_missile_radius = 0.07 - (0.02*m_difficulty);
-
-  m_bot_interface = boti;
 
   change_gamemode(GM_STARTWAVE);
 }
@@ -63,10 +63,10 @@ void Game::start_wave(void)
   m_missiles.clear();
 
   // FIXME check null ptr
-  m_bot_interface->async_accept();
+  g_bot_interface->async_accept();
   stringstream bot_param;
   bot_param << "wave=" << m_wave << ",difficulty=" << m_difficulty << ",missile_radius=" << m_missile_radius;
-  m_bot_interface->async_send(g_timer->now(), string("start_wave"), m_pboat1->get_pos(), bot_param.str());
+  g_bot_interface->async_send(g_timer->now(), string("start_wave"), m_pboat1->get_pos(), bot_param.str());
 }
 
 void Game::spawn_torpedo(void)
@@ -92,7 +92,7 @@ void Game::spawn_torpedo(void)
 
   stringstream bot_param;
   bot_param << "velocity=" << velocity << ",target=" << target[0] << "," << target[1] << ",vector=" << vector[0] << "," << vector[1];
-  m_bot_interface->async_send(m_last_torpedo_spawned_at, "launch_torpedo", pos, bot_param.str());
+  g_bot_interface->async_send(m_last_torpedo_spawned_at, "launch_torpedo", pos, bot_param.str());
 }
 
 void Game::add_effect(FX *effect,int draw_order_id)
@@ -213,7 +213,7 @@ void Game::draw_over(void)
       float sea_level = Sea::sea_func(t_pos[0]) + 0.263;
       if (t_pos[1]<sea_level) {
         t.explode();
-        m_bot_interface->async_send(g_timer->now(), "torpedo_hit_sea", t_pos);
+        g_bot_interface->async_send(g_timer->now(), "torpedo_hit_sea", t_pos);
       }
     }
 
@@ -222,7 +222,7 @@ void Game::draw_over(void)
       if (!m_boats[i]->is_sinking() && t.m_obb.overlaps(m_boats[i]->m_obb)) {
         t.explode();
         m_boats[i]->hit(t_pos[0]);
-        m_bot_interface->async_send(g_timer->now(), "torpedo_hit_boat", t_pos);
+        g_bot_interface->async_send(g_timer->now(), "torpedo_hit_boat", t_pos);
       }
     }
 
@@ -232,7 +232,7 @@ void Game::draw_over(void)
       if (m.exploding() && t.m_obb.overlaps(m.m_explosion_circle)) {
         t.explode();
         m_score += torpedo_hit_score();
-        m_bot_interface->async_send(g_timer->now(), "missile_hit_torpedo", t_pos);
+        g_bot_interface->async_send(g_timer->now(), "missile_hit_torpedo", t_pos);
 
         string tscore = "+" + to_string<int>(torpedo_hit_score());
         FX* textfx = new FX_Moving_Text(tscore,t_pos,vec2(0.0,-1.0),vec2(0.0,0.03));
@@ -415,7 +415,7 @@ void Game::mouse_cb(int button,int action)
     g_app->m_gamemenu->switch_to_item(0);
     g_timer->pause();
 
-    m_bot_interface->async_send(g_timer->now(), "game_paused");
+    g_bot_interface->async_send(g_timer->now(), "game_paused");
     return;
   }
 
@@ -514,7 +514,7 @@ void Game::keyboard_cb(int key,int action)
       m_ended = true;
     } else {
       g_timer->pause();
-      m_bot_interface->async_send(g_timer->now(), "game_paused");
+      g_bot_interface->async_send(g_timer->now(), "game_paused");
     }
     g_mode = MODE_MENU;
     g_app->m_gamemenu->switch_to_item(0);

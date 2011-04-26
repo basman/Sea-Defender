@@ -4,12 +4,14 @@
 #include "resources.h"
 #include "game.h"
 #include "background.h"
+#include "botinterface.h"
 
 extern bool g_exit;
 extern bool g_restart;
 extern Settings *g_settings;
 extern Layouts *g_layouts;
 extern Mouse g_mouse;
+extern BotInterface *g_bot_interface;
 
 GameMenu::GameMenu() :
   m_menusystem()
@@ -196,16 +198,16 @@ void GameMenu::process_action(str_pair_t action)
     m_menusystem.switch_to_menu("main_ingame");
 
     delete g_current_game;
-    g_current_game = new Game(difficulty,wave,&m_bot_interface);
+    g_current_game = new Game(difficulty,wave);
 		g_mode = MODE_GAME;
     g_timer->unpause();
-    m_bot_interface.async_send(g_timer->now(), "game_unpaused");
+    g_bot_interface->async_send(g_timer->now(), "game_unpaused");
   }
 
   if (name=="resumegame") {
     g_mode = MODE_GAME;
     g_timer->unpause();
-    m_bot_interface.async_send(g_timer->now(), "game_unpaused");
+    g_bot_interface->async_send(g_timer->now(), "game_unpaused");
   }
 }
 
@@ -234,7 +236,7 @@ void GameMenu::key_action(int key)
     if (g_current_game) {
   		g_mode = MODE_GAME;
       g_timer->unpause();
-      m_bot_interface.async_send(g_timer->now(), "game_unpaused");
+      g_bot_interface->async_send(g_timer->now(), "game_unpaused");
     } else {
       g_exit = true;
     }

@@ -25,6 +25,7 @@
 #include "hiscore.h"
 #include "torpedo.h"
 #include "game.h"
+#include "botinterface.h"
 
 class App {
 	Glfwapp *m_ctx;

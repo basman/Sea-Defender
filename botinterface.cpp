@@ -27,7 +27,7 @@ bool BotInterface::async_accept()
     return false;
 }
 
-/** @brief async_read_from_bot
+/** @brief async_read
   *
   * read a line from the bot, if available.
   * disconnect bot if any error occurs, unless there is no data available.
@@ -47,12 +47,12 @@ bool BotInterface::async_read(string &msg)
   return false;
 }
 
-/** @brief send_to_bot
+/** @brief async_send
   *
   * send a line to the bot.
   * disconnect bot on any error.
   */
-bool BotInterface::async_send(float time, vec2 pos, string event, string params)
+bool BotInterface::async_send(float time, string event, vec2 pos, string params)
 {
     if(!m_connected)
         return false;

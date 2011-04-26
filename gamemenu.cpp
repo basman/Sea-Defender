@@ -199,13 +199,13 @@ void GameMenu::process_action(str_pair_t action)
     g_current_game = new Game(difficulty,wave,&m_bot_interface);
 		g_mode = MODE_GAME;
     g_timer->unpause();
-  // TODO1 botI: signal (un)pause
-	}
+    m_bot_interface.async_send(g_timer->now(), "game_unpaused");
+  }
 
   if (name=="resumegame") {
     g_mode = MODE_GAME;
     g_timer->unpause();
-  // TODO1 botI: signal (un)pause
+    m_bot_interface.async_send(g_timer->now(), "game_unpaused");
   }
 }
 
@@ -234,7 +234,7 @@ void GameMenu::key_action(int key)
     if (g_current_game) {
   		g_mode = MODE_GAME;
       g_timer->unpause();
-  // TODO1 botI: signal (un)pause
+      m_bot_interface.async_send(g_timer->now(), "game_unpaused");
     } else {
       g_exit = true;
     }

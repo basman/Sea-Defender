@@ -62,13 +62,11 @@ void Game::start_wave(void)
   m_torpedoes.clear();
   m_missiles.clear();
 
-  // TODO1 botI: send wave/level starts (parameter: missile radius)
   // FIXME check null ptr
   m_bot_interface->async_accept();
   stringstream bot_param;
   bot_param << "wave=" << m_wave << ",difficulty=" << m_difficulty << ",missile_radius=" << m_missile_radius;
-  m_bot_interface->async_send(g_timer->now() - m_last_gamemode_change,
-                             m_pboat1->get_pos(), string("start_wave"), bot_param.str());
+  m_bot_interface->async_send(g_timer->now(), string("start_wave"), m_pboat1->get_pos(), bot_param.str());
 }
 
 void Game::spawn_torpedo(void)
@@ -91,7 +89,10 @@ void Game::spawn_torpedo(void)
 
   m_torpedoes_to_spawn--;
   m_last_torpedo_spawned_at = g_timer->now();
-  // TODO1 botI: signal torpedo spawned
+
+  stringstream bot_param;
+  bot_param << "velocity=" << velocity << ",target=" << target[0] << "," << target[1] << ",vector=" << vector[0] << "," << vector[1];
+  m_bot_interface->async_send(m_last_torpedo_spawned_at, "launch_torpedo", pos, bot_param.str());
 }
 
 void Game::add_effect(FX *effect,int draw_order_id)
@@ -210,8 +211,10 @@ void Game::draw_over(void)
     vec2 t_pos = t.get_pos();
     if (t_pos[1] < 0.30) {
       float sea_level = Sea::sea_func(t_pos[0]) + 0.263;
-      if (t_pos[1]<sea_level)
+      if (t_pos[1]<sea_level) {
         t.explode();
+        m_bot_interface->async_send(g_timer->now(), "torpedo_hit_sea", t_pos);
+      }
     }
 
     // torpedo - boat collisions
@@ -219,6 +222,7 @@ void Game::draw_over(void)
       if (!m_boats[i]->is_sinking() && t.m_obb.overlaps(m_boats[i]->m_obb)) {
         t.explode();
         m_boats[i]->hit(t_pos[0]);
+        m_bot_interface->async_send(g_timer->now(), "torpedo_hit_boat", t_pos);
       }
     }
 
@@ -227,8 +231,8 @@ void Game::draw_over(void)
       Missile &m = *m_missiles[y];
       if (m.exploding() && t.m_obb.overlaps(m.m_explosion_circle)) {
         t.explode();
-  // TODO1 botI: signal missile hit
         m_score += torpedo_hit_score();
+        m_bot_interface->async_send(g_timer->now(), "missile_hit_torpedo", t_pos);
 
         string tscore = "+" + to_string<int>(torpedo_hit_score());
         FX* textfx = new FX_Moving_Text(tscore,t_pos,vec2(0.0,-1.0),vec2(0.0,0.03));
@@ -410,7 +414,8 @@ void Game::mouse_cb(int button,int action)
     g_mode = MODE_MENU;
     g_app->m_gamemenu->switch_to_item(0);
     g_timer->pause();
-  // TODO1 botI: signal (un)pause
+
+    m_bot_interface->async_send(g_timer->now(), "game_paused");
     return;
   }
 
@@ -509,7 +514,7 @@ void Game::keyboard_cb(int key,int action)
       m_ended = true;
     } else {
       g_timer->pause();
-  // TODO1 botI: signal (un)pause
+      m_bot_interface->async_send(g_timer->now(), "game_paused");
     }
     g_mode = MODE_MENU;
     g_app->m_gamemenu->switch_to_item(0);

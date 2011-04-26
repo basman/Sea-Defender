@@ -63,8 +63,6 @@ void Torpedo::explode(void)
 
   if (g_current_game)
     g_current_game->add_effect(new FX_Torpedo_Explosion(m_pos,m_vector), 0);
-	
-  // TODO1 botI: signal torpedo explosion
 }
 
 // returns position of the front of the torpedo

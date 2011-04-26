@@ -2,9 +2,10 @@
 #include "missile.h"
 
 #include "resources.h"
-
+#include "botinterface.h"
 #include "game.h"
 
+extern BotInterface *g_bot_interface;
 
 float Missile::m_scale = 0.04;
 
@@ -33,9 +34,9 @@ void Missile::update(float t)
     float len = length(m_pos - m_start_pos);
     if (len>=m_len) {
       explode();
-  // TODO1 botI: signal missile explosion
+      g_bot_interface->async_send(g_timer->now(), "missile_explode", m_pos);
     } else {
-  // TODO1 botI: signal missile update
+  // TODO2 botI: signal missile update
     }
   }
 

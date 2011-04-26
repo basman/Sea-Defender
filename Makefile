@@ -6,7 +6,7 @@ CXXFLAGS = -ffunction-sections -fdata-sections -Wall -Os -fno-exceptions -fno-un
 # -Weffc++ -U_FORTIFY_SOURCE
 # NDEBUG pro release ?
 LDFLAGS = -Wl,--gc-sections -L/usr/X11R6/lib
-LIBS = /usr/local/lib/libglfw.a -pthread -lGL -lm -lGLU -lX11 -lXrandr
+LIBS = /usr/lib/libglfw.a netlib/netlib.a -pthread -lGL -lm -lGLU -lX11 -lXrandr
 INCLUDES = 
 FILE2C = utils/file2c.rb 
 
@@ -43,9 +43,12 @@ resources: data/sha/seawaves.vs
 	$(FILE2C) data/model/OpenGL_logo_flat.m data/res/OpenGL_logo_flat.m.h binary
 
 
-$(BINARY): $(OBJECTS)
+$(BINARY): $(OBJECTS) netlib/netlib.a
 	$(CXX) $(LDFLAGS) -o $(BINARY) $(OBJECTS) $(LIBS)
 
+netlib/netlib.a:
+	$(MAKE) -C netlib
+  
 strip: $(BINARY)
 	strip -s -R .comment $(BINARY)
 
@@ -55,6 +58,7 @@ pack: $(BINARY) strip
 size: clean pack
       
 clean: 
+	$(MAKE) -C netlib clean
 	rm -f $(OBJECTS) $(BINARY) core 
 
 # dependencies

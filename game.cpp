@@ -253,6 +253,7 @@ void Game::draw_over(void)
   draw_HUD();
 
   gamemode_specific_stuff();
+  bot_interface_input();
 }
 
 
@@ -403,8 +404,6 @@ bool Game::mouse_over_menu_button(const vec2 &pos)
 
   return false;
 }
-
-// TODO1 botI: accept missile aiming event from bot
 
 void Game::mouse_cb(int button,int action)
 {
@@ -569,4 +568,10 @@ bool Game::ended(void)
 game_modes_t Game::current_gamemode(void)
 {
   return m_gamemode;
+}
+
+void Game::bot_interface_input(void)
+{
+// TODO1 botI: accept missile aiming event from bot
+
 }

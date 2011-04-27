@@ -49,6 +49,7 @@ class Game
   int ships_left(void);
   int ship_left_score(void);
   int missile_left_score(void);
+  void bot_interface_input(void);
 
   void highscore_entry_key(int key);
   void highscore_entry_char(int ch);

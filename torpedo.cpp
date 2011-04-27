@@ -18,7 +18,7 @@ void Torpedo::update(float t)
 
 	if (m_alive)
 	  m_pos = m_start_pos + m_vector * (tdiff * m_velocity);
-  // TODO1 botI: send torpedo update
+  // TODO2 botI: send torpedo update (maybe in one second intervals to reduce traffic?)
 }
 
 

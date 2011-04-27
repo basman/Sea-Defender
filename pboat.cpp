@@ -2,6 +2,9 @@
 #include "pboat.h"
 #include "background.h"
 #include "resources.h"
+#include "botinterface.h"
+
+extern BotInterface *g_bot_interface;
 
 const int pboat_missiles = 10;
 
@@ -62,12 +65,19 @@ Missile *PBoat::fire_missile(vec2 dest,float radius)
 {
   --m_missiles;
   vec2 src = m_pos + vec2(0.0,m_shift + 0.02);
+
+  stringstream bot_param;
+  bot_param << "missiles_left=" << m_missiles << ",destination=" << dest[0] << "," << dest[1] << ",radius=" << radius;
+  g_bot_interface->async_send(g_timer->now(), "missile_fired", src, bot_param.str());
+
   return new Missile(src,dest,radius);
-  // TODO1 botI: signal missile fired (parameter: m_missiles/missiles left)
 }
 
 void PBoat::reload_ammo(void)
 {
   m_missiles = pboat_missiles;
-  // TODO1 botI: signal missile reload (parameter: m_missiles/missiles left)
+
+  stringstream bot_param;
+  bot_param << "missiles_left=" << m_missiles;
+  g_bot_interface->async_send(g_timer->now(), "missiles_reloaded", m_pos, bot_param.str());
 }

@@ -1,4 +1,5 @@
 #include <sstream>
+#include <stdio.h>
 #include "game.h"
 #include "resources.h"
 #include "background.h"
@@ -575,6 +576,17 @@ game_modes_t Game::current_gamemode(void)
 
 void Game::bot_interface_input(void)
 {
-// TODO1 botI: accept missile aiming event from bot
+    string command;
+    char side_char; // "0", "1", "l" or "r"
+    vec2 target; // missile target
 
+    if(!g_bot_interface->async_read(command))
+        return;
+
+    if(sscanf(command.c_str(), "fire %c %f%*c%f", &side_char, &target[0], &target[1]) == 3) {
+      PBoat *pboat = (side_char == 'l' || side_char == '0') ? m_pboat1 : m_pboat2;
+      if(pboat->missiles_left()) {
+          m_missiles.push_back(m_pboat1->fire_missile(target,m_missile_radius));
+      }
+    }
 }

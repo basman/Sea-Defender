@@ -12,8 +12,8 @@ class BotInterface
         virtual ~BotInterface();
         bool is_connected() { return m_connected; }
         bool async_accept();
-        bool async_send(float time, string event, vec2 pos=vec2(0,0), string params="");
-        bool async_read(string &msg);
+        bool async_send(float time, std::string event, vec2 pos=vec2(0,0), std::string params="");
+        bool async_read(std::string &msg);
     protected:
     private:
         bool m_connected;

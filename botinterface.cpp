@@ -32,7 +32,7 @@ bool BotInterface::async_accept()
   * read a line from the bot, if available.
   * disconnect bot if any error occurs, unless there is no data available.
   */
-bool BotInterface::async_read(string &msg)
+bool BotInterface::async_read(std::string &msg)
 {
   if(!m_connected)
     return false;
@@ -52,7 +52,7 @@ bool BotInterface::async_read(string &msg)
   * send a line to the bot.
   * disconnect bot on any error.
   */
-bool BotInterface::async_send(float time, string event, vec2 pos, string params)
+bool BotInterface::async_send(float time, std::string event, vec2 pos, std::string params)
 {
     if(!m_connected)
         return false;

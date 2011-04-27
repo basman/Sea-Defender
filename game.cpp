@@ -300,7 +300,6 @@ void Game::gamemode_specific_stuff(void)
 
     if (torpedoes_left()<1) {
       change_gamemode(GM_ENDWAVE);
-  // TODO2 botI: signal end of wave
       break;
     }
 

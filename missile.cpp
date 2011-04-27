@@ -36,7 +36,7 @@ void Missile::update(float t)
       explode();
       g_bot_interface->async_send(g_timer->now(), "missile_explode", m_pos);
     } else {
-  // TODO2 botI: signal missile update
+  // TODO2 botI: signal missile update (maybe in one second intervals to reduce traffic?)
     }
   }
 

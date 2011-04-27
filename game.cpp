@@ -294,7 +294,6 @@ void Game::gamemode_specific_stuff(void)
 
     if (ships_left()<1) {
       change_gamemode(GM_GAMEOVER);
-  // TODO2 botI: signal game over
       break;
     }
 
@@ -361,6 +360,10 @@ void Game::gamemode_specific_stuff(void)
 
   case GM_GAMEOVER:
     {
+    stringstream score;
+    score << "score=" << m_score;
+    g_bot_interface->async_send(g_timer->now(), "game_over", vec2(0,0), score.str());
+
     if (g_app->m_hiscore->is_highscore(m_score)) {
       change_gamemode(GM_GAMEOVER_HISCORE);
       m_hiscore_name = g_app->m_hiscore->first_nonbuiltin_name();

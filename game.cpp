@@ -66,7 +66,7 @@ void Game::start_wave(void)
   // FIXME check null ptr
   g_bot_interface->async_accept();
   stringstream bot_param;
-  bot_param << "wave=" << m_wave << ",difficulty=" << m_difficulty << ",missile_radius=" << m_missile_radius;
+  bot_param << "wave=" << m_wave << " difficulty=" << m_difficulty << " missile_radius=" << m_missile_radius;
   g_bot_interface->async_send(g_timer->now(), string("start_wave"), m_pboat1->get_pos(), bot_param.str());
 }
 
@@ -92,7 +92,7 @@ void Game::spawn_torpedo(void)
   m_last_torpedo_spawned_at = g_timer->now();
 
   stringstream bot_param;
-  bot_param << "velocity=" << velocity << ",target=" << target[0] << "," << target[1] << ",vector=" << vector[0] << "," << vector[1];
+  bot_param << "velocity=" << velocity << " target=" << target[0] << "," << target[1] << " vector=" << vector[0] << "," << vector[1];
   g_bot_interface->async_send(m_last_torpedo_spawned_at, "launch_torpedo", pos, bot_param.str());
 }
 

@@ -1,67 +1,67 @@
-9.19136 0.08,0.243061 start_wave wave=10,difficulty=1,missile_radius=0.05
-9.19226 1.59749,1.1 launch_torpedo velocity=0.07,target=0.684384,0.25,vector=-0.913109,-0.85
-12.2927 1.27467,1.1 launch_torpedo velocity=0.07,target=1.30736,0.25,vector=0.0326899,-0.85
-12.8309 1.52,0.266543 missile_fired missiles_left=9,destination=1.25,0.784998,radius=0.05
+9.19136 0.08,0.243061 start_wave wave=10 difficulty=1 missile_radius=0.05
+9.19226 1.59749,1.1 launch_torpedo velocity=0.07 target=0.684384,0.25 vector=-0.913109,-0.85
+12.2927 1.27467,1.1 launch_torpedo velocity=0.07 target=1.30736,0.25 vector=0.0326899,-0.85
+12.8309 1.52,0.266543 missile_fired missiles_left=9 destination=1.25,0.784998 radius=0.05
 15.1693 1.24997,0.785049 missile_explode 
 15.2241 1.25917,0.785058 missile_hit_torpedo 
-15.3932 1.17703,1.1 launch_torpedo velocity=0.07,target=0.915888,0.25,vector=-0.261143,-0.85
-16.7434 1.52,0.262888 missile_fired missiles_left=8,destination=1.306,0.627998,radius=0.05
-18.1115 0.08,0.271772 missile_fired missiles_left=9,destination=1.053,0.734997,radius=0.05
+15.3932 1.17703,1.1 launch_torpedo velocity=0.07 target=0.915888,0.25 vector=-0.261143,-0.85
+16.7434 1.52,0.262888 missile_fired missiles_left=8 destination=1.306,0.627998 radius=0.05
+18.1115 0.08,0.271772 missile_fired missiles_left=9 destination=1.053,0.734997 radius=0.05
 18.4366 1.30595,0.628085 missile_explode 
 18.4933 1.29289,0.626309 missile_hit_torpedo 
-18.4933 0.53952,1.1 launch_torpedo velocity=0.07,target=0.664776,0.25,vector=0.125256,-0.85
-21.0233 0.08,0.270812 missile_fired missiles_left=8,destination=0.591,0.786997,radius=0.05
-21.5934 0.395877,1.1 launch_torpedo velocity=0.07,target=0.856302,0.25,vector=0.460425,-0.85
+18.4933 0.53952,1.1 launch_torpedo velocity=0.07 target=0.664776,0.25 vector=0.125256,-0.85
+21.0233 0.08,0.270812 missile_fired missiles_left=8 destination=0.591,0.786997 radius=0.05
+21.5934 0.395877,1.1 launch_torpedo velocity=0.07 target=0.856302,0.25 vector=0.460425,-0.85
 22.4223 1.05307,0.735029 missile_explode 
 23.929 0.591053,0.78705 missile_explode 
-24.3277 1.52,0.256266 missile_fired missiles_left=7,destination=0.947999,0.35,radius=0.05
-24.6938 0.828072,1.1 launch_torpedo velocity=0.07,target=0.580585,0.25,vector=-0.247487,-0.85
+24.3277 1.52,0.256266 missile_fired missiles_left=7 destination=0.947999,0.35 radius=0.05
+24.6938 0.828072,1.1 launch_torpedo velocity=0.07 target=0.580585,0.25 vector=-0.247487,-0.85
 26.6468 0.947855,0.350024 missile_explode 
 26.6867 0.933118,0.306083 missile_hit_torpedo 
-27.0875 0.08,0.273237 missile_fired missiles_left=7,destination=0.648,0.356998,radius=0.05
-27.7941 0.606502,1.1 launch_torpedo velocity=0.07,target=0.352569,0.25,vector=-0.253933,-0.85
+27.0875 0.08,0.273237 missile_fired missiles_left=7 destination=0.648,0.356998 radius=0.05
+27.7941 0.606502,1.1 launch_torpedo velocity=0.07 target=0.352569,0.25 vector=-0.253933,-0.85
 29.3842 0.648032,0.357002 missile_explode 
 29.4253 0.656913,0.303361 missile_hit_torpedo 
-30.8942 0.219648,1.1 launch_torpedo velocity=0.07,target=0.252025,0.25,vector=0.0323775,-0.85
-31.0481 0.08,0.275685 missile_fired missiles_left=6,destination=0.815,0.352998,radius=0.05
-32.4236 0.08,0.280664 missile_fired missiles_left=5,destination=0.614001,0.418998,radius=0.05
-33.3677 0.08,0.273269 missile_fired missiles_left=4,destination=0.410001,0.501998,radius=0.05
-33.9948 1.22705,1.1 launch_torpedo velocity=0.07,target=0.335438,0.25,vector=-0.891608,-0.85
+30.8942 0.219648,1.1 launch_torpedo velocity=0.07 target=0.252025,0.25 vector=0.0323775,-0.85
+31.0481 0.08,0.275685 missile_fired missiles_left=6 destination=0.815,0.352998 radius=0.05
+32.4236 0.08,0.280664 missile_fired missiles_left=5 destination=0.614001,0.418998 radius=0.05
+33.3677 0.08,0.273269 missile_fired missiles_left=4 destination=0.410001,0.501998 radius=0.05
+33.9948 1.22705,1.1 launch_torpedo velocity=0.07 target=0.335438,0.25 vector=-0.891608,-0.85
 34.0048 0.815107,0.353009 missile_explode 
 34.0587 0.830525,0.297588 missile_hit_torpedo 
 34.6302 0.614023,0.419004 missile_explode 
 34.7034 0.621015,0.388858 missile_hit_torpedo 
 34.9751 0.41028,0.502191 missile_explode 
-35.4803 0.08,0.259062 missile_fired missiles_left=3,destination=0.229001,0.594998,radius=0.05
-36.8566 0.08,0.270601 missile_fired missiles_left=2,destination=0.387001,0.35,radius=0.05
+35.4803 0.08,0.259062 missile_fired missiles_left=3 destination=0.229001,0.594998 radius=0.05
+36.8566 0.08,0.270601 missile_fired missiles_left=2 destination=0.387001,0.35 radius=0.05
 36.9511 0.229087,0.595192 missile_explode 
-37.095 0.697418,1.1 launch_torpedo velocity=0.07,target=1.07829,0.25,vector=0.380873,-0.85
+37.095 0.697418,1.1 launch_torpedo velocity=0.07 target=1.07829,0.25 vector=0.380873,-0.85
 37.1636 0.237875,0.62149 missile_hit_torpedo 
 38.1251 0.38703,0.350007 missile_explode 
 38.2197 0.386154,0.362422 missile_hit_torpedo 
-39.6008 1.52,0.283965 missile_fired missiles_left=6,destination=0.796001,0.692998,radius=0.05
-40.1957 0.988087,1.1 launch_torpedo velocity=0.07,target=0.9902,0.25,vector=0.00211278,-0.85
-42.0882 1.52,0.260461 missile_fired missiles_left=5,destination=0.922,0.620998,radius=0.05
+39.6008 1.52,0.283965 missile_fired missiles_left=6 destination=0.796001,0.692998 radius=0.05
+40.1957 0.988087,1.1 launch_torpedo velocity=0.07 target=0.9902,0.25 vector=0.00211278,-0.85
+42.0882 1.52,0.260461 missile_fired missiles_left=5 destination=0.922,0.620998 radius=0.05
 42.9275 0.795896,0.693057 missile_explode 
 42.9556 0.744088,0.639579 missile_hit_torpedo 
-43.2964 0.954196,1.1 launch_torpedo velocity=0.07,target=0.825638,0.25,vector=-0.128558,-0.85
-44.3841 0.08,0.280864 missile_fired missiles_left=1,destination=1.01,0.632998,radius=0.05
+43.2964 0.954196,1.1 launch_torpedo velocity=0.07 target=0.825638,0.25 vector=-0.128558,-0.85
+44.3841 0.08,0.280864 missile_fired missiles_left=1 destination=1.01,0.632998 radius=0.05
 44.8823 0.921794,0.621122 missile_explode 
 44.9072 0.937388,0.564455 missile_hit_torpedo 
-46.3968 1.46766,1.1 launch_torpedo velocity=0.07,target=0.577799,0.25,vector=-0.889865,-0.85
-46.7604 1.52,0.280885 missile_fired missiles_left=4,destination=0.888999,0.672999,radius=0.05
+46.3968 1.46766,1.1 launch_torpedo velocity=0.07 target=0.577799,0.25 vector=-0.889865,-0.85
+46.7604 1.52,0.280885 missile_fired missiles_left=4 destination=0.888999,0.672999 radius=0.05
 48.3623 1.0101,0.633038 missile_explode 
-49.4976 1.4008,1.1 launch_torpedo velocity=0.07,target=1.30536,0.25,vector=-0.0954373,-0.85
+49.4976 1.4008,1.1 launch_torpedo velocity=0.07 target=1.30536,0.25 vector=-0.0954373,-0.85
 49.7324 0.888911,0.673054 missile_explode 
 49.7767 0.880377,0.611926 missile_hit_torpedo 
 51.1438 0.8,0.24 boat_damaged 
 51.1438 0.990092,0.293638 torpedo_hit_boat 
-52.985 1.52,0.2814 missile_fired missiles_left=3,destination=0.919,0.645998,radius=0.05
-54.0004 1.52,0.268827 missile_fired missiles_left=2,destination=1.357,0.566998,radius=0.05
+52.985 1.52,0.2814 missile_fired missiles_left=3 destination=0.919,0.645998 radius=0.05
+54.0004 1.52,0.268827 missile_fired missiles_left=2 destination=1.357,0.566998 radius=0.05
 55.3605 1.35689,0.56719 missile_explode 
 55.7977 0.918804,0.646117 missile_explode 
 56.1546 0.944814,0.600573 missile_hit_torpedo 
-56.705 1.52,0.265078 missile_fired missiles_left=1,destination=1.329,0.466998,radius=0.05
+56.705 1.52,0.265078 missile_fired missiles_left=1 destination=1.329,0.466998 radius=0.05
 57.8174 1.3289,0.467108 missile_explode 
 57.8933 1.33076,0.476225 missile_hit_torpedo 
 59.603 0,0 game_paused

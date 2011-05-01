@@ -12,6 +12,8 @@
 use IO::Socket;
 use strict;
 
+$|=1;
+
 our $serverHostname = 'localhost';
 our $serverPort     = 2101;
 
@@ -88,11 +90,20 @@ if($#ARGV >= 1) {
 	$serverPort = $ARGV[1];
 }
 
-$gameServer = IO::Socket::INET->new(
+print STDERR "connecting...";
+my $retries = 30;
+my @stati = qw(- \ | /);
+while(! ($gameServer = IO::Socket::INET->new(
 	Proto    => 'tcp',
 	PeerAddr => $serverHostname,
 	PeerPort => $serverPort
-) or die "connection failed: $!";
+)) && --$retries >= 0) {
+	print STDERR "\b";
+	print STDERR $stati[$retries % scalar @stati];
+	sleep(1);
+}
+print STDERR "\n";
+die "connection failed: $!" unless $gameServer;
 
 print STDERR "connected.\n";
 

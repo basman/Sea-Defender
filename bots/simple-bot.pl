@@ -7,6 +7,8 @@
 #	- goes for every torpedo, even if it would hit the water
 #	- no internal timing
 #	- no multi-hit strategy
+#	- does not take into account that torpedoes can be hit at any point
+#	  within their shape
 #
 
 use IO::Socket;

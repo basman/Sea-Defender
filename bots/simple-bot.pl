@@ -34,8 +34,8 @@ sub fire_solution($$$$$) {
 
     #print STDERR "fire_solution: from $fromX,$fromY to $toX,$toY; speed=$torpedo_speed\n";
 
-    my $fireX = abs($toX-$fromX)/2;
-    my $fireY = abs($toY-$fromY)/2;
+    my $fireX = abs($fromX+$toX)/2;
+    my $fireY = abs($fromY+$toY)/2;
     my $side  = $fromX < 0.5 ? 'l' : 'r';
 
     print STDERR "<<  target $fireX,$fireY; side='$side'\n";

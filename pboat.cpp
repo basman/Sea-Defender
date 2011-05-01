@@ -67,7 +67,7 @@ Missile *PBoat::fire_missile(vec2 dest,float radius)
   vec2 src = m_pos + vec2(0.0,m_shift + 0.02);
 
   stringstream bot_param;
-  bot_param << "missiles_left=" << m_missiles << " destination=" << dest[0] << " " << dest[1] << " radius=" << radius;
+  bot_param << "missiles_left=" << m_missiles << " destination=" << dest[0] << "," << dest[1] << " radius=" << radius;
   g_bot_interface->async_send(g_timer->now(), "missile_fired", src, bot_param.str());
 
   return new Missile(src,dest,radius);

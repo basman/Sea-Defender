@@ -31,14 +31,81 @@ my $gameServer;
 
 # ==========   SUB ROUTINES   ===========
 
+# calculate distance between two points
+sub distance($$$$) {
+    my ($x1,$y1,$x2,$y2) = @_;
+    return sqrt(($x1-$x2)**2 + ($y1-$y2)**2);
+}
+
+# calculate y offset of a line based on two points on that line
+sub line_offset($$$$) {
+    my ($xT,$yT,$xD,$yD) = @_;
+    return $yT - $xT*($yD-$yT)/($xD-$xT);
+}
+
+# calculate one angle of a triangle with given lengths of all sides
+# return: cosine of the angle opposite to the first parameter (length of side 'a')
+sub cos_alpha($$$) {
+    my ($a,$b,$c) = @_;
+    return ($b**2 + $c**2 - $a**2) / (2*$b*$c);
+}
+
+# calculate two solutions for torpedos' runlength until interception point
+sub torpedo_intercep_runlength($$$$) {
+    my ($cos_AoB, $dist_TM, $vT, $vM) = @_;
+
+    if($cos_AoB**2 - (1+$vM/$vT)**2 < 0) {
+	# no real (rational or irrational) solution, if the radicant (sqrt below) is negative
+	return (undef, undef);
+    }
+
+    my $termA = $dist_TM*$cos_AoB;
+    my $termB = $dist_TM*sqrt($cos_AoB**2 - (1+$vM/$vT)**2);
+    my $termC = (1+$vM/$vT)**2;
+
+    return (
+	($termA + $termB) / $termC,
+	($termA - $termB) / $termC
+    );
+}
+
+sub intercept_points($$$$$$$$) {
+    my ($xT,$yT, $xD,$yD, $xM,$yM, $vT,$vM) = @_;
+    my ($x1,$y1,$runlength1,$x2,$y2,$runlength2); # result array
+
+    # TODO calculate both runlengths (if any)
+    # TODO calculate target coordinates from (xT,yT) and runlength
+    #       use line equation of (T-D)
+
+    return ($x1,$y1,$runlength1,$x2,$y2,$runlength2);
+}
+
 sub fire_solution($$$$$) {
     my ($fromX, $fromY, $toX, $toY, $torpedo_speed) = @_;
 
     #print STDERR "fire_solution: from $fromX,$fromY to $toX,$toY; speed=$torpedo_speed\n";
 
-    my $fireX = ($fromX+$toX)/2;
-    my $fireY = ($fromY+$toY)/2;
-    my $side  = $fromX < 0.5 ? 'l' : 'r';
+    # calculate intercept points for both pboats
+    my @Xs;
+    my @Ys;
+    my @runlengths;
+    my ($Xs[0], $Ys[0], $runlengths[0], $Xs[1], $Ys[1], $runlengths[1]) = intercept_points($fromX,$fromY,$toX,$toY,$pboatX_L,$pboatY_L,$torpedo_speed,$missile_speed);
+    my ($Xs[2], $Ys[2], $runlengths[2], $Xs[3], $Ys[3], $runlengths[3]) = intercept_points($fromX,$fromY,$toX,$toY,$pboatX_R,$pboatY_R,$torpedo_speed,$missile_speed);
+
+    my ($X, $Y, $runlength);
+    for(my $i=0; $i < 4; $i++) {
+	# initialize or choose shorter interception
+	if((!defined $runlength && defined $runlengths[i]) || 
+	    defined $runlengths[i] && $runlengths[i] < $runlength) {
+	    $X = $Xs[i];
+	    $Y = $Ys[i];
+	    $runlength = $runlengths[i];
+	}
+    }
+
+    if(!defined $runlength) {
+	print STDERR "FATAL: no solution found!\n";
+    }
 
     print STDERR "<<  target $fireX,$fireY; side='$side'\n";
 

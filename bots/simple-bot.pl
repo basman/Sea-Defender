@@ -78,6 +78,8 @@ sub receive($) {
 	}
     } elsif($event eq 'missile_fired') {
 	print ">> missile_fired at $posX,$posY to $params{destination}, radius=$params{radius}\n";
+    } else {
+	print ">>RAW '$rawmsg'\n";
     }
 }
 

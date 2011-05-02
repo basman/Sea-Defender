@@ -37,12 +37,6 @@ sub distance($$$$) {
     return sqrt(($x1-$x2)**2 + ($y1-$y2)**2);
 }
 
-# calculate y offset of a line based on two points on that line
-sub line_offset($$$$) {
-    my ($xT,$yT,$xD,$yD) = @_;
-    return $yT - $xT*($yD-$yT)/($xD-$xT);
-}
-
 # calculate one angle of a triangle with given lengths of all sides
 # return: cosine of the angle opposite to the first parameter (length of side 'a')
 sub cos_alpha($$$) {
@@ -69,6 +63,23 @@ sub torpedo_intercep_runlengths($$$$) {
     );
 }
 
+sub project_point($$$$) {
+    # xT,yT: torpedo's launch position
+    # M: inverse gradient of line T-D
+    # xD,yD: torpedoes target position (ship)
+    my ($xT,$yT,$M,$runlength) = @_;
+
+    # formula gives two solutions (from T in each direction along line T-D)
+    # try one solution first, then the other
+    my $y = $yT + sqrt(1-$yT**2-$runlength**2/4/($M**2+1)**2);
+    if($y > $yT) {
+	$y = $yT - sqrt(1-$yT**2-$runlength**2/4/($M**2+1)**2);
+    }
+    my $x = $M*($y-$yT) + $xT;
+
+    return ($x, $y);
+}
+
 sub intercept_points($$$$$$$$) {
     # T: torpedo launch position; D: torpedo destination; M: missile launch position
     # vT: torpedo speed; vM: missile speed
@@ -81,31 +92,32 @@ sub intercept_points($$$$$$$$) {
     my $dist_MD = distance($xM,$yM,$xD,$yD);
     my $cos_AoB = cos_alpha($dist_MD,$dist_TM,$dist_TD);
 
-    # offset_TD is the y-value of line T-D at x=0
-    # it is used later to compute the missile target coords.
-    my $offset_TD = line_offset($xT,$yT, $xD,$yD);
+    # gradient of line T-D
+    my $m_TD = ($yD-$yT) / ($xD-$xT);
 
     ($runlength1, $runlength2) = torpedo_intercept_runlengths($cos_AoB, $dist_TM, $vT, $vM); 
-    if(defined $runlength1 && ($runlength1 < 0 || $runlength1 > $dist_TD) {
+    if(defined $runlength1 && ($runlength1 < 0 || $runlength1 > $dist_TD)) {
 	# either no collision possible or too late (after hitting the torpedo's target)
 	$runlength1 = undef;
 	$x1 = undef;
 	$y1 = undef;
     } elsif(defined $runlength1) {
-	# TODO calculate target coordinates from (xT,yT) and runlength
+	# calculate target coordinates from (xT,yT) and runlength
 	#       using line equation of (T-D) and
 	#	distance pythagoras
+	($x1, $y1) = project_point($xT,$yT,1/$m_TD,$runlength1);
     }
 
-    if(defined $runlength2 && ($runlength2 < 0 || $runlength2 > $dist_TD) {
+    if(defined $runlength2 && ($runlength2 < 0 || $runlength2 > $dist_TD)) {
 	# either no collision possible or too late (after hitting the torpedo's target)
 	$runlength2 = undef;
 	$x2 = undef;
 	$y2 = undef;
     } elsif(defined $runlength2) {
-	# TODO calculate target coordinates from (xT,yT) and runlength
+	# calculate target coordinates from (xT,yT) and runlength
 	#       using line equation of (T-D) and
 	#	distance pythagoras
+	($x2, $y2) = project_point($xT,$yT,1/$m_TD,$runlength2);
     }
 
     return ($x1,$y1,$runlength1,$x2,$y2,$runlength2);

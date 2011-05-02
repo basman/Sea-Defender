@@ -45,7 +45,7 @@ sub cos_alpha($$$) {
 }
 
 # calculate two solutions for torpedos' runlength until interception point
-sub torpedo_intercep_runlengths($$$$) {
+sub torpedo_intercept_runlengths($$$$) {
     my ($cos_AoB, $dist_TM, $vT, $vM) = @_;
 
     if($cos_AoB**2 - (1+$vM/$vT)**2 < 0) {

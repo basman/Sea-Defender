@@ -51,7 +51,7 @@ sub cos_alpha($$$) {
 }
 
 # calculate two solutions for torpedos' runlength until interception point
-sub torpedo_intercep_runlength($$$$) {
+sub torpedo_intercep_runlengths($$$$) {
     my ($cos_AoB, $dist_TM, $vT, $vM) = @_;
 
     if($cos_AoB**2 - (1+$vM/$vT)**2 < 0) {
@@ -70,12 +70,43 @@ sub torpedo_intercep_runlength($$$$) {
 }
 
 sub intercept_points($$$$$$$$) {
+    # T: torpedo launch position; D: torpedo destination; M: missile launch position
+    # vT: torpedo speed; vM: missile speed
     my ($xT,$yT, $xD,$yD, $xM,$yM, $vT,$vM) = @_;
     my ($x1,$y1,$runlength1,$x2,$y2,$runlength2); # result array
 
-    # TODO calculate both runlengths (if any)
-    # TODO calculate target coordinates from (xT,yT) and runlength
-    #       use line equation of (T-D)
+    # calculate both runlengths (if any)
+    my $dist_TM = distance($xT,$yT,$xM,$yM);
+    my $dist_TD = distance($xT,$yT,$xD,$yD);
+    my $dist_MD = distance($xM,$yM,$xD,$yD);
+    my $cos_AoB = cos_alpha($dist_MD,$dist_TM,$dist_TD);
+
+    # offset_TD is the y-value of line T-D at x=0
+    # it is used later to compute the missile target coords.
+    my $offset_TD = line_offset($xT,$yT, $xD,$yD);
+
+    ($runlength1, $runlength2) = torpedo_intercept_runlengths($cos_AoB, $dist_TM, $vT, $vM); 
+    if(defined $runlength1 && ($runlength1 < 0 || $runlength1 > $dist_TD) {
+	# either no collision possible or too late (after hitting the torpedo's target)
+	$runlength1 = undef;
+	$x1 = undef;
+	$y1 = undef;
+    } elsif(defined $runlength1) {
+	# TODO calculate target coordinates from (xT,yT) and runlength
+	#       using line equation of (T-D) and
+	#	distance pythagoras
+    }
+
+    if(defined $runlength2 && ($runlength2 < 0 || $runlength2 > $dist_TD) {
+	# either no collision possible or too late (after hitting the torpedo's target)
+	$runlength2 = undef;
+	$x2 = undef;
+	$y2 = undef;
+    } elsif(defined $runlength2) {
+	# TODO calculate target coordinates from (xT,yT) and runlength
+	#       using line equation of (T-D) and
+	#	distance pythagoras
+    }
 
     return ($x1,$y1,$runlength1,$x2,$y2,$runlength2);
 }
@@ -85,21 +116,24 @@ sub fire_solution($$$$$) {
 
     #print STDERR "fire_solution: from $fromX,$fromY to $toX,$toY; speed=$torpedo_speed\n";
 
-    # calculate intercept points for both pboats
+    # calculate intercept points for both pboats (up to 4 solutions)
     my @Xs;
     my @Ys;
     my @runlengths;
-    my ($Xs[0], $Ys[0], $runlengths[0], $Xs[1], $Ys[1], $runlengths[1]) = intercept_points($fromX,$fromY,$toX,$toY,$pboatX_L,$pboatY_L,$torpedo_speed,$missile_speed);
-    my ($Xs[2], $Ys[2], $runlengths[2], $Xs[3], $Ys[3], $runlengths[3]) = intercept_points($fromX,$fromY,$toX,$toY,$pboatX_R,$pboatY_R,$torpedo_speed,$missile_speed);
+    ($Xs[0], $Ys[0], $runlengths[0], $Xs[1], $Ys[1], $runlengths[1]) =
+	intercept_points($fromX,$fromY,$toX,$toY,$pboatX_L,$pboatY_L,$torpedo_speed,$missile_speed);
+    ($Xs[2], $Ys[2], $runlengths[2], $Xs[3], $Ys[3], $runlengths[3]) =
+	intercept_points($fromX,$fromY,$toX,$toY,$pboatX_R,$pboatY_R,$torpedo_speed,$missile_speed);
 
-    my ($X, $Y, $runlength);
+    my ($X, $Y, $runlength, $side);
     for(my $i=0; $i < 4; $i++) {
 	# initialize or choose shorter interception
-	if((!defined $runlength && defined $runlengths[i]) || 
-	    defined $runlengths[i] && $runlengths[i] < $runlength) {
-	    $X = $Xs[i];
-	    $Y = $Ys[i];
-	    $runlength = $runlengths[i];
+	if((!defined $runlength && defined $runlengths[$i]) || 
+	    defined $runlengths[$i] && $runlengths[$i] < $runlength) {
+	    $X = $Xs[$i];
+	    $Y = $Ys[$i];
+	    $runlength = $runlengths[$i];
+	    $side = $i < 2 ? 'l' : 'r';
 	}
     }
 
@@ -107,9 +141,9 @@ sub fire_solution($$$$$) {
 	print STDERR "FATAL: no solution found!\n";
     }
 
-    print STDERR "<<  target $fireX,$fireY; side='$side'\n";
+    print STDERR "<<  target $X,$Y; side='$side'\n";
 
-    return ($fireX, $fireY, $side);
+    return ($X, $Y, $side);
 }
 
 sub fire($$$) {

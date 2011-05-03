@@ -1,0 +1,16 @@
+connecting...\
+connected.
+>>RAW '6.56448 0.08,0.26042 start_wave wave=1 difficulty=1 missile_radius=0.05'
+>> torpedo launch at 0.318869,1.1 target=0.4961,0.25 speed=0.052
+FATAL: no solution found!
+ T(0.318869,1.1) D(0.4961,0.25) Tspeed=0.052; M0(0.08,0.25) M1(1.52,0.25) Mspeed=0.25
+Use of uninitialized value $X in concatenation (.) or string at bots/simple-bot.pl line 138, <GEN1> line 2.
+Use of uninitialized value $Y in concatenation (.) or string at bots/simple-bot.pl line 138, <GEN1> line 2.
+Use of uninitialized value $side in concatenation (.) or string at bots/simple-bot.pl line 138, <GEN1> line 2.
+<<  target ,; side=''
+Use of uninitialized value $side in string eq at bots/simple-bot.pl line 145, <GEN1> line 2.
+Use of uninitialized value $side in string eq at bots/simple-bot.pl line 145, <GEN1> line 2.
+Use of uninitialized value $side in concatenation (.) or string at bots/simple-bot.pl line 150, <GEN1> line 2.
+Use of uninitialized value $x in concatenation (.) or string at bots/simple-bot.pl line 150, <GEN1> line 2.
+Use of uninitialized value $y in concatenation (.) or string at bots/simple-bot.pl line 150, <GEN1> line 2.
+>>RAW '8.6949 0,0 game_paused '

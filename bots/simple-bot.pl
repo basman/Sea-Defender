@@ -2,8 +2,8 @@
 #
 # Simple bot:
 #	- launches missiles immediately upon receipt of a torpedo message
-#	- pboat side is always the same as side of torpedo's launch position
-#	- does not care about remaining missiles per pboat
+#	- pboat side is picked by shortest missile distance and missiles
+#	  available
 #	- goes for every torpedo, even if it would hit the water
 #	- no internal timing
 #	- no multi-hit strategy
@@ -144,9 +144,13 @@ sub fire_solution($$$$$) {
 	    $distance = distance($Xs[$i],$Ys[$i], $xM,$yM);
 	}
 
+	# fetch corresponding missiles_left value
+	my $missiles_left = $i < 2 ? $missiles_left_L : $missiles_left_R;
+
 	# initialize or choose shorter interception
-	if((!defined $bestdistance && defined $runlengths[$i]) || 
-	    defined $runlengths[$i] && $bestdistance > $distance) {
+	if(((!defined $bestdistance && defined $runlengths[$i]) || 
+	    defined $runlengths[$i] && $bestdistance > $distance) &&
+	    $missiles_left > 0) {
 	    $X = $Xs[$i];
 	    $Y = $Ys[$i];
 	    $bestdistance = distance($Xs[$i],$Ys[$i], $xM,$yM);

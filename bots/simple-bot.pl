@@ -48,14 +48,14 @@ sub cos_alpha($$$) {
 sub torpedo_intercept_runlengths($$$$) {
     my ($cos_AoB, $dist_TM, $vT, $vM) = @_;
 
-    if($cos_AoB**2 - (1+$vM/$vT)**2 < 0) {
+    if($cos_AoB**2 - (1-($vM/$vT)**2) < 0) {
 	# no real (rational or irrational) solution, if the radicant (sqrt below) is negative
 	return (undef, undef);
     }
 
     my $termA = $dist_TM*$cos_AoB;
-    my $termB = $dist_TM*sqrt($cos_AoB**2 - (1+$vM/$vT)**2);
-    my $termC = (1+$vM/$vT)**2;
+    my $termB = $dist_TM*sqrt($cos_AoB**2 - (1-($vM/$vT)**2));
+    my $termC = 1-($vM/$vT)**2;
 
     return (
 	($termA + $termB) / $termC,

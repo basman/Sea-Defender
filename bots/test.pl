@@ -42,6 +42,18 @@ sub torpedo_intercept_runlengths($$$$) {
     );
 }
 
+# compute point on line T-D with distance $runlength to T and lying between T and D
+sub project_point($$$$$) {
+    my ($xT,$yT, $xD,$yD, $runlength) = @_;
+    my ($x,$y);
+    my $dist_TD = distance($xT,$yT, $xD,$yD);
+
+    $x = $xT + ($xD-$xT)/$dist_TD*$runlength;
+    $y = $yT + ($yD-$yT)/$dist_TD*$runlength;
+
+    return ($x,$y);
+}
+
 sub intercept_points($$$$$$$$) {
     # T: torpedo launch position; D: torpedo destination; M: missile launch position
     # vT: torpedo speed; vM: missile speed
@@ -66,8 +78,7 @@ sub intercept_points($$$$$$$$) {
     } elsif(defined $runlength1) {
 	# calculate target coordinates by (xT,yT) and runlength
 	#       using gradient of (T-D)
-	#TODO
-	print STDERR "r1=$runlength1\n";
+	($x1,$y1) = project_point($xT,$yT, $xD,$yD, $runlength1);
     }
 
     if(defined $runlength2 && ($runlength2 < 0 || $runlength2 > $dist_TD)) {
@@ -78,8 +89,7 @@ sub intercept_points($$$$$$$$) {
     } elsif(defined $runlength2) {
 	# calculate target coordinates by (xT,yT) and runlength
 	#       using gradient of (T-D)
-	#TODO
-	print STDERR "r2=$runlength2\n";
+	($x2,$y2) = project_point($xT,$yT, $xD,$yD, $runlength2);
     }
 
     return ($x1,$y1,$runlength1, $x2,$y2,$runlength2);

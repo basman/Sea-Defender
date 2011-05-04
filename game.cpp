@@ -585,7 +585,7 @@ void Game::bot_interface_input(void)
     if(sscanf(command.c_str(), "fire %c %f%*c%f", &side_char, &target[0], &target[1]) == 3) {
       PBoat *pboat = (side_char == 'l' || side_char == '0') ? m_pboat1 : m_pboat2;
       if(pboat->missiles_left()) {
-          m_missiles.push_back(m_pboat1->fire_missile(target,m_missile_radius));
+          m_missiles.push_back(pboat->fire_missile(target,m_missile_radius));
       }
     }
 }

@@ -1,12 +1,17 @@
 #!/usr/bin/perl -w
 #
 # Simple bot:
+#	- aim for torpedo's head
 #	- launches missiles immediately upon receipt of a torpedo message
 #	- pboat side is picked by shortest missile distance and missiles
 #	  available
 #	- goes for every torpedo, even if it would hit the water
 #	- no internal timing
 #	- no multi-hit strategy
+#       - step 1: don't fire two missiles, if one will hit two torpedoes
+#       - step 2: launch delay to wait for torpedoes' crossing point to match
+#             	  missile target point
+#
 #	- does not take into account that torpedoes can be hit at any point
 #	  within their shape
 #

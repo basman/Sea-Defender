@@ -131,24 +131,35 @@ sub fire_solution($$$$$) {
     ($Xs[2], $Ys[2], $runlengths[2], $Xs[3], $Ys[3], $runlengths[3]) =
 	intercept_points($fromX,$fromY,$toX,$toY,$pboatX_R,$pboatY_R,$torpedo_speed,$missile_speed);
 
-    my ($X, $Y, $runlength, $side);
+    my ($X, $Y, $bestdistance, $side);
     for(my $i=0; $i < 4; $i++) {
+	# pick the corresponding pboat side
+	my $cur_side = $i < 2 ? 'l' : 'r';
+
+	# pick the corresponding launch position
+	my ($xM,$yM) = $i < 2 ? ($pboatX_L,$pboatY_L) : ($pboatX_R,$pboatY_R);
+	# calculate missile distance only once within this loop
+	my $distance;
+	if(defined $Xs[$i] && defined $Ys[$i]) {
+	    $distance = distance($Xs[$i],$Ys[$i], $xM,$yM);
+	}
+
 	# initialize or choose shorter interception
-	if((!defined $runlength && defined $runlengths[$i]) || 
-	    defined $runlengths[$i] && $runlengths[$i] < $runlength) {
+	if((!defined $bestdistance && defined $runlengths[$i]) || 
+	    defined $runlengths[$i] && $bestdistance > $distance) {
 	    $X = $Xs[$i];
 	    $Y = $Ys[$i];
-	    $runlength = $runlengths[$i];
-	    $side = $i < 2 ? 'l' : 'r';
+	    $bestdistance = distance($Xs[$i],$Ys[$i], $xM,$yM);
+	    $side = $cur_side;
 	}
     }
 
-    if(!defined $runlength) {
+    if(!defined $bestdistance) {
 	print STDERR "FATAL: no solution found!\n";
 		print STDERR "   -- solution input: T($fromX,$fromY) D($toX,$toY) Tspeed=$torpedo_speed; M0($pboatX_L,$pboatY_L) M1($pboatX_R,$pboatY_R) Mspeed=$missile_speed\n";
+    } else {
+	print STDERR "<<  target $X,$Y; side='$side'\n";
     }
-
-    print STDERR "<<  target $X,$Y; side='$side'\n";
 
     return ($X, $Y, $side);
 }

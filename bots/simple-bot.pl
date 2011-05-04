@@ -1,11 +1,11 @@
 #!/usr/bin/perl -w
 #
 # Simple bot:
-#	- aim for torpedo's head
 #	- launches missiles immediately upon receipt of a torpedo message
 #	- pboat side is picked by shortest missile distance and missiles
 #	  available
-#	- goes for every torpedo, even if it would hit the water
+#	- goes for every torpedo, even if it would hit the water (needs to
+#	  keep track of sunken ships)
 #	- no internal timing
 #	- no multi-hit strategy
 #       - step 1: don't fire two missiles, if one will hit two torpedoes
@@ -31,6 +31,8 @@ my $pboatX_R	    = 1.52;	# constant
 my $pboatY_R        = 0.25;	# varies with sea level
 my $missiles_left_L = 10;	# reloaded upon wave_start
 my $missiles_left_R = 10;	# reloaded upon wave_start
+
+my $lead_offset	    = 0.05;	# aim for the head of torpedoes
 
 my $gameServer;
 
@@ -79,6 +81,12 @@ sub project_point($$$$$) {
     $y = $yT + ($yD-$yT)/$dist_TD*$runlength;
 
     return ($x,$y);
+}
+
+# aim a bit in front of torpedo's centre
+sub lead_correction($$$$) {
+    my ($fromX,$fromY, $toX,$toY) = @_;
+    return project_point($fromX,$fromY, $toX,$toY, $lead_offset);
 }
 
 sub intercept_points($$$$$$$$) {
@@ -203,6 +211,7 @@ sub receive($) {
 	print ">> torpedo launch at $posX,$posY target=$params{target} speed=$params{velocity}\n";
 
 	my ($toX, $toY) = split(/,/, $params{target}, 2);
+	($posX, $posY) = lead_correction($posX,$posY, $toX,$toY);
 	my ($solutionX, $solutionY, $side) = fire_solution($posX, $posY, $toX, $toY, $params{velocity});
 	fire($solutionX, $solutionY, $side);
     } elsif($event eq 'missiles_reloaded' || $event eq 'missile_fired') {

@@ -8,7 +8,6 @@ bot-interface
 -------------
 
 - write more sophisticated bot with
-    - aim for torpedo's head
     - fire delay (so torpedo shoes up before missile is being fired)
     - double or tripple hit optimization
        - step 1: don't fire two missiles, if one will hit two torpedoes

@@ -160,9 +160,10 @@ sub fire_solution($$$$$) {
 	# fetch corresponding missiles_left value
 	my $missiles_left = $i < 2 ? $missiles_left_L : $missiles_left_R;
 
-	# initialize or choose shorter interception
+	# initialize or with 70% chance choose shorter interception
 	if(((!defined $bestdistance && defined $runlengths[$i]) || 
-	    defined $runlengths[$i] && $bestdistance > $distance) &&
+	    (defined $runlengths[$i] && $bestdistance > $distance &&
+	    rand() < 0.7)) &&
 	    $missiles_left > 0) {
 	    $X = $Xs[$i];
 	    $Y = $Ys[$i];
